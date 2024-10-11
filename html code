@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify - Your favourite music is here</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #010803;
+            padding: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            height: 50px;
+            background-color: black;
+            color: white;
+        }
+        li {
+            margin-right: 20px;
+            color: white;
+        }
+        nav ul li {
+            padding: 0 12px;
+        }
+        .brand img {
+            height: 40px;
+            padding: 0 8px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .container {
+            min-height: 75vh;
+            padding: 20px;
+            background-color: black;
+            color: white;
+            font-family: 'Varela Round', sans-serif;
+            display: flex;
+            flex-direction: column;
+            width: 70%;
+            margin: 23px auto;
+            border-radius: 12px;
+            padding: 34px;
+            background-image: url('images/download.jpeg'); /* Updated image path */
+        }
+        .bottom {
+            position: sticky;
+            bottom: 0;
+            height: 100px;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            flex-direction: column;
+            margin: 12px 0;
+        }
+        .icons {
+            margin-top: 10px;
+            color: white;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        #myProgressBar {
+            width: 80vw;
+            margin: 0 20px;
+            cursor: pointer;
+        }
+        .songItemContainer {
+            margin-top: 74px;
+        }
+        .songItem {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #222;
+            padding: 10px;
+            border-radius: 34px;
+            margin: 12px 0;
+        }
+        .songItem img {
+            height: 50px;
+            width: 50px;
+            margin: 0 23px;
+            border-radius: 34px;
+        }
+        .songItem span {
+            margin-right: 10px;
+        }
+        .timestamp {
+            margin: 0 23px;
+        }
+        .songInfo {
+            position: absolute;
+            left: 10vw;
+            font-family: 'Varela Round', sans-serif;
+        }
+        .songInfo img {
+            opacity: 0;
+            transition: opacity 0.4s ease-in;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <ul>
+        <li class="brand"><img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png" alt="Spotify"></li>
+        <li><a href="#" style="color: white; text-decoration: none;">Home</a></li>
+        <li><a href="#" style="color: white; text-decoration: none;">About</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h1>Best of NCS - No Copyright Sounds</h1>
+    <div class="songItemContainer">
+        <div class="songItem">
+            <img src="images/gala_gala.jpeg" alt="Gala Gala"> <!-- Updated image path -->
+            <span class="songName">Gala Gala</span>
+            <span class="songlistplay"><span class="timestamp">03:54</span></span>
+            <i id="0" class="far fa-play-circle fa-2x play-button"></i>
+            <audio id="audio0" src="audio/gala_gala.mp3"></audio> <!-- Updated audio path -->
+        </div>
+        <div class="songItem">
+            <img src="images/jf.jpeg" alt="Jennifer Lopez - Sen"> <!-- Updated image path -->
+            <span class="songName">Jennifer Lopez - Sen</span>
+            <span class="songlistplay"><span class="timestamp">04:15</span></span>
+            <i id="1" class="far fa-play-circle fa-2x play-button"></i>
+            <audio id="audio1" src="audio/jennifer_lopez_sen.mp3"></audio> <!-- Updated audio path -->
+        </div>
+        <div class="songItem">
+            <img src="images/kathi_lanti_pilla.jpeg" alt="Kathi Lanti Pilla"> <!-- Updated image path -->
+            <span class="songName">Kathi Lanti Pilla</span>
+            <span class="songlistplay"><span class="timestamp">04:05</span></span>
+            <i id="2" class="far fa-play-circle fa-2x play-button"></i>
+            <audio id="audio2" src="audio/kathi_lanti_pilla.mp3"></audio> <!-- Updated audio path -->
+        </div>
+        <div class="songItem">
+            <img src="images/shape_of_you.jpeg" alt="Shape of You"> <!-- Updated image path -->
+            <span class="songName">Shape of You</span>
+            <span class="songlistplay"><span class="timestamp">04:23</span></span>
+            <i id="3" class="far fa-play-circle fa-2x play-button"></i>
+            <audio id="audio3" src="audio/shape_of_you.mp3"></audio> <!-- Updated audio path -->
+        </div>
+    </div>
+</div>
+
+<div class="bottom">
+    <input type="range" name="range" id="myProgressBar" min="0" value="0" max="100">
+    <div class="icons">
+        <i class="fas fa-backward fa-2x" id="previous"></i>
+        <i class="far fa-play-circle fa-3x" id="masterPlay"></i>
+        <i class="fas fa-forward fa-2x" id="next"></i>
+    </div>
+</div>
+<div class="songInfo">
+    <img src="images/playing.gif" width="42px" alt="" id="gif"> <!-- Updated image path -->
+    <span id="masterSongName">Gala Gala</span>
+</div>
+
+<script src="https://kit.fontawesome.com/85146110f0.js" crossorigin="anonymous"></script>
+<script>
+    // JavaScript to control audio playback
+    const playButtons = document.querySelectorAll('.play-button');
+    
+    playButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const audio = document.getElementById(`audio${button.id}`);
+            const allAudios = document.querySelectorAll('audio');
+
+            // Pause all other audio elements
+            allAudios.forEach(a => {
+                if (a !== audio) {
+                    a.pause();
+                }
+            });
+
+            // Play or pause the selected audio
+            if (audio && audio.paused) {
+                audio.play();
+                button.classList.remove('far');
+                button.classList.add('fas');
+            } else if (audio) {
+                audio.pause();
+                button.classList.remove('fas');
+                button.classList.add('far');
+            }
+        });
+    });
+</script>
+</body>
+</html>
