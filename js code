@@ -72,3 +72,4 @@ function makeAllPlays() {
         element.classList.add('fa-play-circle');
     });
 }
+
