@@ -138,21 +138,21 @@
             <span class="songName">Jennifer Lopez - Sen</span>
             <span class="songlistplay"><span class="timestamp">04:15</span></span>
             <i id="1" class="far fa-play-circle fa-2x play-button"></i>
-            <audio id="audio1" src="audio/jennifer_lopez_sen.mp3"></audio> <!-- Updated audio path -->
+            <audio id="audio1" src="audio/Jennifer Lopez-SenSongsMp3.Co.mp3"></audio> <!-- Updated audio path -->
         </div>
         <div class="songItem">
             <img src="images/kathi_lanti_pilla.jpeg" alt="Kathi Lanti Pilla"> <!-- Updated image path -->
             <span class="songName">Kathi Lanti Pilla</span>
             <span class="songlistplay"><span class="timestamp">04:05</span></span>
             <i id="2" class="far fa-play-circle fa-2x play-button"></i>
-            <audio id="audio2" src="audio/kathi_lanti_pilla.mp3"></audio> <!-- Updated audio path -->
+            <audio id="audio2" src="audio/Kathi Lanti Pilla-SenSongsMp3.Com.mp3"></audio> <!-- Updated audio path -->
         </div>
         <div class="songItem">
-            <img src="images/shape_of_you.jpeg" alt="Shape of You"> <!-- Updated image path -->
+            <img src="images/shapeofyou.jpeg" alt="Shape of You"> <!-- Updated image path -->
             <span class="songName">Shape of You</span>
             <span class="songlistplay"><span class="timestamp">04:23</span></span>
             <i id="3" class="far fa-play-circle fa-2x play-button"></i>
-            <audio id="audio3" src="audio/shape_of_you.mp3"></audio> <!-- Updated audio path -->
+            <audio id="audio3" src="audio/Shape-of-You(PagalWorld).mp3"></audio> <!-- Updated audio path -->
         </div>
     </div>
 </div>
@@ -172,33 +172,96 @@
 
 <script src="https://kit.fontawesome.com/85146110f0.js" crossorigin="anonymous"></script>
 <script>
-    // JavaScript to control audio playback
+    // Variables to control songs
     const playButtons = document.querySelectorAll('.play-button');
-    
-    playButtons.forEach(button => {
+    const progressBar = document.getElementById('myProgressBar');
+    const masterPlayButton = document.getElementById('masterPlay');
+    const previousButton = document.getElementById('previous');
+    const nextButton = document.getElementById('next');
+    const allAudios = document.querySelectorAll('audio');
+    const songInfo = document.getElementById('masterSongName');
+    let currentAudioIndex = 0;
+
+    let currentAudio = allAudios[currentAudioIndex];
+    let isPlaying = false;
+
+    function updateMasterSongName() {
+        const songNames = ["Gala Gala", "Jennifer Lopez - Sen", "Kathi Lanti Pilla", "Shape of You"];
+        songInfo.textContent = songNames[currentAudioIndex];
+    }
+
+    // Play or pause the selected song
+    function playSong(audio) {
+        audio.play();
+        masterPlayButton.classList.remove('far');
+        masterPlayButton.classList.add('fas');
+        isPlaying = true;
+        updateMasterSongName();
+    }
+
+    function pauseSong(audio) {
+        audio.pause();
+        masterPlayButton.classList.remove('fas');
+        masterPlayButton.classList.add('far');
+        isPlaying = false;
+    }
+
+    // Add event listener to master play button
+    masterPlayButton.addEventListener('click', () => {
+        if (isPlaying) {
+            pauseSong(currentAudio);
+        } else {
+            playSong(currentAudio);
+        }
+    });
+
+    // Play and pause individual song buttons
+    playButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
-            const audio = document.getElementById(`audio${button.id}`);
-            const allAudios = document.querySelectorAll('audio');
-
-            // Pause all other audio elements
-            allAudios.forEach(a => {
-                if (a !== audio) {
-                    a.pause();
+            if (currentAudioIndex !== index) {
+                // Stop current song and start the new one
+                pauseSong(currentAudio);
+                currentAudio = allAudios[index];
+                currentAudioIndex = index;
+                playSong(currentAudio);
+            } else {
+                // Play/pause the current song
+                if (isPlaying) {
+                    pauseSong(currentAudio);
+                } else {
+                    playSong(currentAudio);
                 }
-            });
-
-            // Play or pause the selected audio
-            if (audio && audio.paused) {
-                audio.play();
-                button.classList.remove('far');
-                button.classList.add('fas');
-            } else if (audio) {
-                audio.pause();
-                button.classList.remove('fas');
-                button.classList.add('far');
             }
         });
+    });
+
+    // Update progress bar as the song plays
+    currentAudio.addEventListener('timeupdate', () => {
+        const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
+        progressBar.value = progress;
+    });
+
+    // Seek song position by adjusting the progress bar
+    progressBar.addEventListener('input', () => {
+        const seekTime = (progressBar.value / 100) * currentAudio.duration;
+        currentAudio.currentTime = seekTime;
+    });
+
+    // Add functionality for next and previous buttons
+    nextButton.addEventListener('click', () => {
+        pauseSong(currentAudio);
+        currentAudioIndex = (currentAudioIndex + 1) % allAudios.length;
+        currentAudio = allAudios[currentAudioIndex];
+        playSong(currentAudio);
+    });
+
+    previousButton.addEventListener('click', () => {
+        pauseSong(currentAudio);
+        currentAudioIndex = (currentAudioIndex - 1 + allAudios.length) % allAudios.length;
+        currentAudio = allAudios[currentAudioIndex];
+        playSong(currentAudio);
     });
 </script>
 </body>
 </html>
+
